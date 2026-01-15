@@ -1,0 +1,40 @@
+exp_name: "CLEVR_conformity_glm45v(6)"
+seed: 42
+
+data:
+  path: "data/CLEVR/experiment_ready(6).jsonl"
+  image_key: "image_base64"          # 来自处理数据集.py
+  text_key: "parsed_inputs"          # "Image: ...\nQuestion:...\n(A)..."
+  label_key: "multiple_choice_scores"  # one-hot；后续在 _rows_to_samples 里适配
+
+grouping:
+  context_k: 5
+  group_correct_ratio: 1.0           # 第一次先用“群体全对”
+
+protocols:
+  - "raw"
+  - "correct_guidance"
+  - "wrong_guidance"
+  - "trust"
+  - "doubt"
+
+models:
+  - name: "GLM-4.5V"
+    adapter: "glm45v_api"
+    params:
+      # 1. 这里填你在 Lemon API 获取到的兑换码/令牌 (通常是 sk- 开头或你之前提到的 4630...，请以网站显示的“令牌”为准)
+      api_key: "sk-TfcMUdXThi3EziOOD6VtQGBzKa1G1wYstsb00U06sGN1t8xr"
+
+      # 2. 新增 base_url 字段。注意：智谱 SDK 通常需要 "/v4" 结尾，或者是 "/v1"
+      # 请查看 Lemon API 文档确认。通常如果不确定，先填 "/v4"
+      base_url: "https://new.lemonapi.site/v1"
+
+      model: "zai-org/GLM-4.5V"#glm-4.5v
+      temperature: 0.0
+      top_p: 0.9
+      max_tokens: 1024
+
+save:
+  dir: "outputs/results"
+  log_dir: "outputs/logs"
+  write_xlsx: false

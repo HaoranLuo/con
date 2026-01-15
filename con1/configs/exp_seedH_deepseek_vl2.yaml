@@ -1,0 +1,42 @@
+exp_name: "CLEVR_conformity_deepseek_vl2(6)"
+seed: 42
+
+data:
+  path: "data/CLEVR/experiment_ready(6).jsonl" # 确保路径对
+  image_key: "image_base64"
+  text_key: "parsed_inputs"
+  label_key: "multiple_choice_scores"
+
+grouping:
+  context_k: 5                     # 建议改为 5 以保持实验一致性
+  group_correct_ratio: 1.0
+
+protocols:
+  - "raw"
+  - "correct_guidance"
+  - "wrong_guidance"
+  - "trust"
+  - "doubt"
+
+models:
+  - name: "DeepSeek-VL2"
+    adapter: "deepseek_api"
+    params:
+      # 1. 填你的 Lemon API 令牌
+      api_key: "sk-TfcMUdXThi3EziOOD6VtQGBzKa1G1wYstsb00U06sGN1t8xr"
+
+      # 2. 填 Lemon API 的地址 (通常以 /v1 结尾)
+      base_url: "https://new.lemonapi.site/v1"
+
+      # 3. 填准确的模型 ID (去网站列表里复制)
+      # 常见 ID: "deepseek-vl2", "deepseek-ai/deepseek-vl2-tiny", "deepseek-vl-chat"
+      model: "DeepSeek-VL2"
+
+      temperature: 0.0
+      top_p: 0.9
+      max_tokens: 1024            # 建议改大，防止截断
+
+save:
+  dir: "outputs/results"
+  log_dir: "outputs/logs"
+  write_xlsx: false

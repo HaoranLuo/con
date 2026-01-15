@@ -1,0 +1,34 @@
+exp_name: "seedH_conformity_glm4v_flash_v1"
+seed: 42
+
+data:
+  path: "data/seed_h/shards/val_data_shard_0001.jsonl"
+  image_key: "image_base64"          # 来自处理数据集.py
+  text_key: "parsed_inputs"          # "Image: ...\nQuestion:...\n(A)..."
+  label_key: "multiple_choice_scores"  # one-hot；后续在 _rows_to_samples 里适配
+
+grouping:
+  context_k: 2
+  group_correct_ratio: 1.0           # 第一次先用“群体全对”
+
+protocols:
+  - "raw"
+  - "correct_guidance"
+  - "wrong_guidance"
+  - "trust"
+  - "doubt"
+
+models:
+  - name: "GLM-4V-Flash"
+    adapter: "glm_api"               # 对应 src/adapters/glm_api.py
+    params:
+      api_key: 50685c885af244f9a18cd26994c1dd07.X5w9Q2jKCRLYrMOL
+      model: "glm-4v-flash"
+      temperature: 0.0
+      top_p: 0.9
+      max_tokens: 64
+
+save:
+  dir: "outputs/results"
+  log_dir: "outputs/logs"
+  write_xlsx: false

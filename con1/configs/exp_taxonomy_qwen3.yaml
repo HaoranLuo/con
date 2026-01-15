@@ -1,0 +1,33 @@
+exp_name: "seed_h_classification(4)"
+seed: 42
+
+data:
+  # 指向你想要分类的原始数据集
+  path: "data/seed_h/experiment_ready(4).jsonl"
+  text_key: "parsed_inputs"
+  # 下面这些字段此时不重要，但保留以防报错
+  image_key: "image_base64"
+  label_key: "multiple_choice_scores"
+
+models:
+  - name: "Qwen3-32B-Classifier"
+    adapter: "qwen_api" # 复用你的 qwen_api.py
+    params:
+      api_key: "sk-TfcMUdXThi3EziOOD6VtQGBzKa1G1wYstsb00U06sGN1t8xr"
+      base_url: "https://new.lemonapi.site/v1"
+
+      # ★ 重点：在这里填入你指定的模型 ID ★
+      model: "Qwen/Qwen3-32B"
+      # 或者是 "Qwen/Qwen2.5-32B-Instruct"，请根据 API 文档确认
+
+      temperature: 0.0 # 分类任务必须由 0 温度以保证稳定
+      max_tokens: 20   # 只需要输出一个词
+      top_p: 0.1
+
+# 占位符，保持格式兼容
+grouping:
+  context_k: 0
+  group_correct_ratio: 1.0
+protocols: ["raw"]
+save:
+  dir: "outputs/taxonomy"

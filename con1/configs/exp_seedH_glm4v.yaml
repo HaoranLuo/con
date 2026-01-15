@@ -1,0 +1,34 @@
+exp_name: "seedH_conformity_glm4v"
+seed: 42
+
+data:
+  path: "data/seed_h/shards/val_data_shard_0001.jsonl"
+  image_key: "image_base64"          # 来自处理数据集.py
+  text_key: "parsed_inputs"          # "Image: ...\nQuestion:...\n(A)..."
+  label_key: "multiple_choice_scores"  # one-hot；后续在 _rows_to_samples 里适配
+
+grouping:
+  context_k: 2
+  group_correct_ratio: 1.0           # 第一次先用“群体全对”
+
+protocols:
+  - "raw"
+  - "correct_guidance"
+  - "wrong_guidance"
+  - "trust"
+  - "doubt"
+
+models:
+  - name: "GLM-4V"
+    adapter: "glm4v_api"               # 对应 src/adapters/glm_api.py
+    params:
+      api_key: "sk-TfcMUdXThi3EziOOD6VtQGBzKa1G1wYstsb00U06sGN1t8xr"
+      model: "glm-4v"
+      temperature: 0.0
+      top_p: 0.9
+      max_tokens: 64
+
+save:
+  dir: "outputs/results"
+  log_dir: "outputs/logs"
+  write_xlsx: false
